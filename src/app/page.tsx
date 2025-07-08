@@ -1,95 +1,57 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import ProductCard from "@/components/ProductCard";
+import { getProducts } from "@/utils/api";
+import { Product } from "@/types";
+import Image from 'next/image';
 
-export default function Home() {
+export const revalidate = 3600;
+
+export default async function Home() {
+  const products: Product[] = await getProducts();
+
+
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+    <div>
+      <section className="hero">
+        <div className="hero-content">
+          <h1 className="hero-title">Welcome to Our Store</h1>
+          <p className="hero-description">
+            Discover amazing products at great prices
+          </p>
+          <button className="hero-button">Shop Now</button>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="hero-img">
+          <Image src="/landing-shirt2.webp" alt="Logo" fill />
+        </div>
+
+      </section>
+
+      <section className="products-section">
+        <h2 className="section-title">Our Products</h2>
+        <div className="grid">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section className="features">
+        <h2 className="section-title">Why Choose Us</h2>
+        <div className="features-grid">
+          <div className="feature-card">
+            <h3>Fast Delivery</h3>
+            <p>Get your products delivered quickly and safely</p>
+          </div>
+          <div className="feature-card">
+            <h3>Quality Products</h3>
+            <p>All our products are carefully selected for quality</p>
+          </div>
+          <div className="feature-card">
+            <h3>Great Support</h3>
+            <p>Our team is here to help you anytime</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
