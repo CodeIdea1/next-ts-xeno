@@ -40,7 +40,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const product: Product | null = await getProduct(id);
 
   if (!product) {
-    notFound();
+    notFound(); 
   }
 
   return (
