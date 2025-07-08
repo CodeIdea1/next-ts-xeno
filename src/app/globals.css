@@ -86,7 +86,6 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: start;
 }
 
 .hero-title {

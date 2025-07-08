@@ -6,7 +6,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 export const revalidate = 259200;
-
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
 export async function generateStaticParams() {
   const products = await getProducts();
   return products.map((product) => ({
@@ -14,9 +16,11 @@ export async function generateStaticParams() {
   }));
 }
 export async function generateMetadata(
-  { params }: { params: { id: string } }
+  { params }: PageProps
 ): Promise<Metadata> {
-  const product = await getProduct(params.id);
+  const { id } = await params;
+  const product = await getProduct(id);
+  
   if (!product) {
     return { title: "Product Not Found" };
   }
@@ -29,12 +33,10 @@ export async function generateMetadata(
     },
   };
 }
-export default async function ProductDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const product: Product | null = await getProduct(params.id);
+
+export default async function ProductDetailPage({ params }: PageProps) {
+  const { id } = await params;
+  const product: Product | null = await getProduct(id);
 
   if (!product) {
     notFound();
