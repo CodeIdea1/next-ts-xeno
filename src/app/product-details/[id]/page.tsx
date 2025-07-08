@@ -4,14 +4,8 @@ import Image from "next/image";
 import AddToCartButton from "@/components/AddToCartButton";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
+import type { Metadata } from "next";
 export const revalidate = 259200;
-
-interface Props {
-  params: {
-    id: string;
-  };
-}
 
 export async function generateStaticParams() {
   const products = await getProducts();
@@ -19,8 +13,9 @@ export async function generateStaticParams() {
     id: product.id.toString(),
   }));
 }
-
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+): Promise<Metadata> {
   const product = await getProduct(params.id);
   if (!product) {
     return { title: "Product Not Found" };
@@ -34,13 +29,15 @@ export async function generateMetadata({ params }: Props) {
     },
   };
 }
-
-export default async function ProductDetailPage({ params }: Props) {
-  const id = params.id;
-  const product: Product | null = await getProduct(id);
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const product: Product | null = await getProduct(params.id);
 
   if (!product) {
-    notFound(); 
+    notFound();
   }
 
   return (
